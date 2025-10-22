@@ -29,6 +29,45 @@ document.addEventListener("DOMContentLoaded", () => {
 
         activitiesList.appendChild(activityCard);
 
+        // Add participants section (pretty list with avatars)
+        const participantsContainer = document.createElement("div");
+        participantsContainer.className = "participants-list";
+
+        const participantsTitle = document.createElement("p");
+        participantsTitle.innerHTML = "<strong>Participants:</strong>";
+        participantsContainer.appendChild(participantsTitle);
+
+        const ul = document.createElement("ul");
+
+        if (Array.isArray(details.participants) && details.participants.length > 0) {
+          details.participants.forEach((p) => {
+            const li = document.createElement("li");
+            li.className = "participant-item";
+
+            const avatar = document.createElement("span");
+            avatar.className = "participant-avatar";
+            // create a simple avatar from the start of the email/name
+            const initials = (p.split("@")[0] || p).replace(/[^a-z0-9]/gi, "").slice(0, 2).toUpperCase();
+            avatar.textContent = initials || "?";
+
+            const nameSpan = document.createElement("span");
+            nameSpan.className = "participant-name";
+            nameSpan.textContent = p;
+
+            li.appendChild(avatar);
+            li.appendChild(nameSpan);
+            ul.appendChild(li);
+          });
+        } else {
+          const li = document.createElement("li");
+          li.className = "no-participants";
+          li.textContent = "No participants yet";
+          ul.appendChild(li);
+        }
+
+        participantsContainer.appendChild(ul);
+        activityCard.appendChild(participantsContainer);
+
         // Add option to select dropdown
         const option = document.createElement("option");
         option.value = name;
